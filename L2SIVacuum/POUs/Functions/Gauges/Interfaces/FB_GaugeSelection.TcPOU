@@ -19,9 +19,5 @@ ELSE
     IG := st_defaultGauge;
 END_IF]]></ST>
     </Implementation>
-    <LineIds Name="FB_GaugeSelection">
-      <LineId Id="3" Count="3" />
-      <LineId Id="2" Count="0" />
-    </LineIds>
   </POU>
 </TcPlcObject>
