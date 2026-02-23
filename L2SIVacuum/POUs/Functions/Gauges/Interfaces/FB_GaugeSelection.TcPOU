@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <TcPlcObject Version="1.1.0.1">
-  <POU Name="POU" Id="{d0430b83-40b0-475f-aa09-4e109be9ff76}" SpecialFunc="None">
-    <Declaration><![CDATA[FUNCTION_BLOCK POU EXTENDS FB_GaugeBase
+  <POU Name="FB_GaugeSelection" Id="{d0430b83-40b0-475f-aa09-4e109be9ff76}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK FB_GaugeSelection EXTENDS FB_GaugeBase
 VAR_INPUT
     st_defaultGauge : ST_VG;
     st_secondGauge : ST_VG;
@@ -19,5 +19,9 @@ ELSE
     IG := st_defaultGauge;
 END_IF]]></ST>
     </Implementation>
+    <LineIds Name="FB_GaugeSelection">
+      <LineId Id="3" Count="3" />
+      <LineId Id="2" Count="0" />
+    </LineIds>
   </POU>
 </TcPlcObject>
