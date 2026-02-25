@@ -7,7 +7,7 @@
 FUNCTION_BLOCK FB_Gauge_Interface
 VAR_INPUT
 END_VAR
-VAR_IN_OUT
+VAR_OUTPUT
     {attribute 'pytmc' := 'pv:'}
     VG : ST_VG;
 END_VAR
@@ -15,6 +15,7 @@ VAR
     i_rPRESS AT%I*: REAL;
     i_xAT_VAC AT%I*: BOOL;
     i_xPRESS_OK AT%I*: BOOL;
+    i_sPath AT%I* : STRING;
 
 END_VAR
 ]]></Declaration>
@@ -26,6 +27,7 @@ END_VAR
 VG.rPRESS := i_rPRESS;
 VG.xAT_VAC := i_xAT_VAC;
 VG.xPRESS_OK := i_xPRESS_OK;
+VG.sPath := i_sPath;
 ]]></ST>
     </Implementation>
   </POU>
