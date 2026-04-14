@@ -1,0 +1,113 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1">
+  <POU Name="FB_KashiyamaPump_G" Id="{0b0502f2-0c6b-40fa-943b-64b4a6556c70}" SpecialFunc="None">
+    <Declaration><![CDATA[(* This function block does basic controls FOR the Kashiyama pump. Turns off pump
+in the event of errors/ warnings. Provides interlocking interface.*)
+FUNCTION_BLOCK FB_KashiyamaPump_G
+VAR_IN_OUT
+
+END_VAR
+VAR_INPUT
+
+END_VAR
+VAR_OUTPUT
+    {attribute 'pytmc' := 'pv:'}
+    q_stPump : ST_KashiyamaDryPump;
+END_VAR
+VAR
+    TONtmr : TON;
+    resetTmr : TON;
+
+    (* Output *)
+    q_xRunDO 	AT%Q*:	BOOL;
+    q_xResetDo	AT%Q*: 	BOOL;
+    q_xLspdDo	AT%Q*: 	BOOL;
+	q_xRemote 	AT%Q*:  BOOL;
+
+(* Input *)
+    i_xAlarm	AT%I*:	BOOL;
+    i_xIsRun	AT%I*:	BOOL;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[
+//Only run when commanded to be in remote and there is no alarm (this is a normally open alarm 0 = OK)
+q_stPump.xIlkOK := q_stPump.q_xRemoteDO AND NOT q_stPump.i_xAlarmOK;
+
+IF q_stPump.xIlkOK THEN
+    q_stPump.q_xRunDO := q_stPump.pv_xRunSW;
+    ELSE
+        q_stPump.PV_xRunSW := FALSE;
+        q_stPump.q_xRunDO := FALSE;
+END_IF
+
+q_stPump.xLspd_IlkENA := q_stPump.xIlkOK;
+
+IF q_stPump.xLspd_IlkENA THEN
+    q_stPump.q_xLspdDo := q_stPump.xLspdSW;
+    ELSE
+        q_stPump.xLspdSW := FALSE;
+        q_stPump.q_xLspdDo := FALSE;
+END_IF
+
+//resetTmr (In := iq_stPump.xResetSW, PT := T#2S);
+//IF resetTmr.Q THEN
+//	iq_stPump.xResetSW := FALSE;
+//END_IF
+
+q_stPump.q_xResetDo := NOT q_stPump.i_xIsRun AND q_stPump.xResetSW;
+
+//countdown Timer
+TONtmr (IN := q_stPump.i_xIsRun, PT := T#20S);
+q_stPump.RdyTmr := TO_REAL(TONtmr.PT) - TO_REAL(TONtmr.ET);
+
+(*State evaluation*)
+IF NOT q_stPump.i_xAlarmOK THEN
+    q_stPump.eState := pumpFAULT;
+ELSIF NOT q_stPump.q_xRunDo AND q_stPump.i_xAlarmOK THEN
+        q_stPump.eState := pumpSTOPPED;
+ELSIF NOT q_stPump.q_xRunDo AND NOT q_stPump.i_xIsRun THEN
+        q_stPump.eState := pumpSTARTING;
+ELSIF q_stPump.i_xIsRun THEN
+        q_stPump.eState := pumpRUNNING;
+ELSE
+    q_stPump.eState := pumpFAULT;
+END_IF
+
+//Mapping
+ACT_IO();]]></ST>
+    </Implementation>
+    <Action Name="ACT_IO" Id="{cd71f84a-24ec-4e3d-aa2b-f0d8498f54d0}">
+      <Implementation>
+        <ST><![CDATA[(* Output *)
+    q_xRunDO 	:= q_stPump.q_xRunDO;
+    q_xResetDo := q_stPump.q_xResetDo;
+    q_xLspdDo := q_stPump.q_xLspdDo;
+	q_xRemote := q_stPump.q_xRemoteDo;
+(* Input *)
+    q_stPump.i_xAlarmOK :=	i_xAlarm;
+    q_stPump.i_xIsRun :=	i_xIsRun;]]></ST>
+      </Implementation>
+    </Action>
+    <Method Name="M_Run" Id="{07262c3a-7667-4780-bcae-a56652bc1657}">
+      <Declaration><![CDATA[METHOD PUBLIC M_Run : BOOL
+VAR_INPUT
+    run:bool; // set to true to run, false to stop;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[
+this^.q_stPump.pv_xRunSW := run;]]></ST>
+      </Implementation>
+    </Method>
+    <LineIds Name="FB_KashiyamaPump_G">
+      <LineId Id="1" Count="45" />
+    </LineIds>
+    <LineIds Name="FB_KashiyamaPump_G.ACT_IO">
+      <LineId Id="1" Count="7" />
+    </LineIds>
+    <LineIds Name="FB_KashiyamaPump_G.M_Run">
+      <LineId Id="1" Count="1" />
+    </LineIds>
+  </POU>
+</TcPlcObject>
