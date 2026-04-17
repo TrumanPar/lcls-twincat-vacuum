@@ -22,7 +22,7 @@ VAR
     q_xRunDO 	AT%Q*:	BOOL;
     q_xResetDo	AT%Q*: 	BOOL;
     q_xLspdDo	AT%Q*: 	BOOL;
-	q_xRemote 	AT%Q*:  BOOL;
+    q_xRemote 	AT%Q*:  BOOL;
 
 (* Input *)
     i_xAlarm	AT%I*:	BOOL;
@@ -62,9 +62,9 @@ TONtmr (IN := q_stPump.i_xIsRun, PT := T#20S);
 q_stPump.RdyTmr := TO_REAL(TONtmr.PT) - TO_REAL(TONtmr.ET);
 
 (*State evaluation*)
-IF NOT q_stPump.i_xAlarmOK THEN
+IF q_stPump.i_xAlarmOK THEN  // reminder this is normally closed (0 = no alarm | 1 = alarm)
     q_stPump.eState := pumpFAULT;
-ELSIF NOT q_stPump.q_xRunDo AND q_stPump.i_xAlarmOK THEN
+ELSIF NOT q_stPump.q_xRunDo AND NOT q_stPump.i_xAlarmOK THEN
         q_stPump.eState := pumpSTOPPED;
 ELSIF NOT q_stPump.q_xRunDo AND NOT q_stPump.i_xIsRun THEN
         q_stPump.eState := pumpSTARTING;
@@ -83,7 +83,7 @@ ACT_IO();]]></ST>
     q_xRunDO 	:= q_stPump.q_xRunDO;
     q_xResetDo := q_stPump.q_xResetDo;
     q_xLspdDo := q_stPump.q_xLspdDo;
-	q_xRemote := q_stPump.q_xRemoteDo;
+    q_xRemote := q_stPump.q_xRemoteDo;
 (* Input *)
     q_stPump.i_xAlarmOK :=	i_xAlarm;
     q_stPump.i_xIsRun :=	i_xIsRun;]]></ST>
@@ -100,14 +100,5 @@ END_VAR
 this^.q_stPump.pv_xRunSW := run;]]></ST>
       </Implementation>
     </Method>
-    <LineIds Name="FB_KashiyamaPump_G">
-      <LineId Id="1" Count="45" />
-    </LineIds>
-    <LineIds Name="FB_KashiyamaPump_G.ACT_IO">
-      <LineId Id="1" Count="7" />
-    </LineIds>
-    <LineIds Name="FB_KashiyamaPump_G.M_Run">
-      <LineId Id="1" Count="1" />
-    </LineIds>
   </POU>
 </TcPlcObject>

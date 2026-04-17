@@ -20,7 +20,7 @@ STRUCT
     io: i
     '}
     q_xLspdDo	: 	BOOL;
-	{attribute 'pytmc' := '
+    {attribute 'pytmc' := '
     pv: REM_DO;
     field: ZNAM FALSE;
     field: ONAM TRUE;
