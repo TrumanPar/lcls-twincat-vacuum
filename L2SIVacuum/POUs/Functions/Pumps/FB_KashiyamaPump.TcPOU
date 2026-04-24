@@ -67,7 +67,7 @@ IF NOT q_stPump.i_xAlarmOK THEN
     q_stPump.eState := pumpFAULT;
 ELSIF NOT q_stPump.q_xRunDo AND q_stPump.i_xAlarmOK THEN
         q_stPump.eState := pumpSTOPPED;
-ELSIF NOT q_stPump.q_xRunDo AND NOT q_stPump.i_xIsRun THEN
+ELSIF q_stPump.q_xRunDo AND NOT q_stPump.i_xIsRun THEN
         q_stPump.eState := pumpSTARTING;
 ELSIF q_stPump.i_xIsRun THEN
         q_stPump.eState := pumpRUNNING;

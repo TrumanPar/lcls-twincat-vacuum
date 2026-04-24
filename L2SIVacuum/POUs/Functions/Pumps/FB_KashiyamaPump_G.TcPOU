@@ -66,7 +66,7 @@ IF q_stPump.i_xAlarmOK THEN  // reminder this is normally closed (0 = no alarm |
     q_stPump.eState := pumpFAULT;
 ELSIF NOT q_stPump.q_xRunDo AND NOT q_stPump.i_xAlarmOK THEN
         q_stPump.eState := pumpSTOPPED;
-ELSIF NOT q_stPump.q_xRunDo AND NOT q_stPump.i_xIsRun THEN
+ELSIF q_stPump.q_xRunDo AND NOT q_stPump.i_xIsRun THEN
         q_stPump.eState := pumpSTARTING;
 ELSIF q_stPump.i_xIsRun THEN
         q_stPump.eState := pumpRUNNING;
@@ -118,7 +118,7 @@ VAR_INPUT
 END_VAR
 ]]></Declaration>
       <Implementation>
-        <ST><![CDATA[this^.q_stPump.q_xLspdDo := lowspeed;]]></ST>
+        <ST><![CDATA[THIS^.q_stPump.xLspdSW := lowspeed;]]></ST>
       </Implementation>
     </Method>
     <Method Name="M_Remote" Id="{00e5798c-bdcc-4e95-88b6-b2d65e45e2c9}">
@@ -138,7 +138,7 @@ VAR_INPUT
 END_VAR
 ]]></Declaration>
       <Implementation>
-        <ST><![CDATA[this^.q_stPump.q_xResetDo := reset;]]></ST>
+        <ST><![CDATA[this^.q_stPump.xResetSW := reset;]]></ST>
       </Implementation>
     </Method>
     <Method Name="M_Run" Id="{07262c3a-7667-4780-bcae-a56652bc1657}">
