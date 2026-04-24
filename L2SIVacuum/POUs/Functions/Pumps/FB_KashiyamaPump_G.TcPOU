@@ -75,20 +75,72 @@ ELSE
 END_IF
 
 //Mapping
-ACT_IO();]]></ST>
+M_IO();]]></ST>
     </Implementation>
-    <Action Name="ACT_IO" Id="{cd71f84a-24ec-4e3d-aa2b-f0d8498f54d0}">
+    <Method Name="M_Alarm" Id="{7e55e378-9ab6-4983-add4-a4faf7232b2c}">
+      <Declaration><![CDATA[METHOD M_Alarm : BOOL
+VAR_INPUT
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[M_alarm := THIS^.q_stPump.i_xAlarmOK;   // 0 = no alarm | 1 = alarm ]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="M_IO" Id="{cc5a91ec-d268-412f-a580-fe0b22b2f643}">
+      <Declaration><![CDATA[METHOD M_IO : BOOL
+VAR_INPUT
+END_VAR
+]]></Declaration>
       <Implementation>
         <ST><![CDATA[(* Output *)
-    q_xRunDO 	:= q_stPump.q_xRunDO;
-    q_xResetDo := q_stPump.q_xResetDo;
-    q_xLspdDo := q_stPump.q_xLspdDo;
-    q_xRemote := q_stPump.q_xRemoteDo;
+    q_xRunDO 	:= THIS^.q_stPump.q_xRunDO;
+    q_xResetDo := THIS^.q_stPump.q_xResetDo;
+    q_xLspdDo := THIS^.q_stPump.q_xLspdDo;
+    q_xRemote := THIS^.q_stPump.q_xRemoteDo;
 (* Input *)
-    q_stPump.i_xAlarmOK :=	i_xAlarm;
-    q_stPump.i_xIsRun :=	i_xIsRun;]]></ST>
+    THIS^.q_stPump.i_xAlarmOK :=	THIS^.i_xAlarm;
+    THIS^.q_stPump.i_xIsRun :=	THIS^.i_xIsRun;]]></ST>
       </Implementation>
-    </Action>
+    </Method>
+    <Method Name="M_IsRun" Id="{1961f1b5-d27b-43e9-88c2-bcaabedd5a6a}">
+      <Declaration><![CDATA[METHOD M_IsRun : BOOL
+VAR_INPUT
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[M_IsRun := THIS^.q_stPump.i_xIsRun;]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="M_Lspd" Id="{dbd5297e-2d54-4e99-84aa-49271fd6d365}">
+      <Declaration><![CDATA[METHOD M_Lspd : BOOL
+VAR_INPUT
+    lowspeed : BOOL;  // Set low speed setting
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[this^.q_stPump.q_xLspdDo := lowspeed;]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="M_Remote" Id="{00e5798c-bdcc-4e95-88b6-b2d65e45e2c9}">
+      <Declaration><![CDATA[METHOD M_Remote : BOOL
+VAR_INPUT
+    remote : BOOL; // Remote command
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[this^.q_stPump.q_xRemoteDo := remote;]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="M_Reset" Id="{67101dd4-d330-4e76-8840-ca74fe68dd48}">
+      <Declaration><![CDATA[METHOD M_Reset : BOOL
+VAR_INPUT
+    reset : BOOL; // Set true to clear faults
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[this^.q_stPump.q_xResetDo := reset;]]></ST>
+      </Implementation>
+    </Method>
     <Method Name="M_Run" Id="{07262c3a-7667-4780-bcae-a56652bc1657}">
       <Declaration><![CDATA[METHOD PUBLIC M_Run : BOOL
 VAR_INPUT
