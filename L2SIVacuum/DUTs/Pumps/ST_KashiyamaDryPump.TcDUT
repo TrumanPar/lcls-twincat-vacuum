@@ -79,6 +79,13 @@ STRUCT
     io: io
     '}
     xLspdSW     :   BOOL;
+    {attribute 'pytmc' := '
+    pv: REMOTE_SW;
+    field: ZNAM FALSE;
+    field: ONAM TRUE;
+    io: io
+    '}
+    xRemoteSW     :   BOOL;
     LowSP  :   REAL := 0.02; //Torr
     HighSP :   REAL; //Torr
     RdyTmr : REAL;

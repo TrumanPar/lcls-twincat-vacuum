@@ -128,7 +128,7 @@ VAR_INPUT
 END_VAR
 ]]></Declaration>
       <Implementation>
-        <ST><![CDATA[this^.q_stPump.q_xRemoteDo := remote;]]></ST>
+        <ST><![CDATA[this^.q_stPump.xRemoteSW := remote;]]></ST>
       </Implementation>
     </Method>
     <Method Name="M_Reset" Id="{67101dd4-d330-4e76-8840-ca74fe68dd48}">
