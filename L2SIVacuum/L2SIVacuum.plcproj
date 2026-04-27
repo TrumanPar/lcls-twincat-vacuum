@@ -330,6 +330,9 @@
     <Compile Include="POUs\Functions\Pumps\FB_KashiyamaPump.TcPOU">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="POUs\Functions\Pumps\FB_KashiyamaPump_G.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="POUs\Functions\Pumps\FB_PIP_Gamma.TcPOU">
       <SubType>Code</SubType>
     </Compile>
